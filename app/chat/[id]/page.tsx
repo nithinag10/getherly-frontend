@@ -5,34 +5,38 @@ import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { getMessages, sendMessage, getSummary } from '../../services/api'
+import { Loader2 } from 'lucide-react' // Add this import
 
 export default function ChatPage() {
   const { id } = useParams()
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
-  const [summary, setSummary] = useState('')
+  const [summary, setSummary] = useState(null)
+  const [isLoadingSummary, setIsLoadingSummary] = useState(false)
+
+  const handleCloseSummary = () => {
+    setSummary(null)
+  }
 
   useEffect(() => {
-    if (!id) return; // Avoid fetching messages before `id` exists
+    if (!id) return;
 
     const fetchMessages = async () => {
       try {
         const result = await getMessages(id);
-    
-        // Check if result.messages exists and is an array
+
         const fetchedMessages = Array.isArray(result.messages) ? result.messages : [];
-    
         setMessages((prevMessages) => {
           const existingMessageMap = new Map(
             prevMessages.map((msg) => [msg.id || msg.tempId, msg])
           );
-    
+
           const reconciledMessages = fetchedMessages.map((msg) =>
             existingMessageMap.has(msg.id)
               ? { ...existingMessageMap.get(msg.id), ...msg }
               : msg
           );
-    
+
           return reconciledMessages;
         });
       } catch (error) {
@@ -51,10 +55,10 @@ export default function ChatPage() {
 
     const userId = '43398710-349f-41da-b29b-0f90094fafdc'
     const tempMessage = {
-      tempId: `temp`,
+      tempId: `temp-${Date.now()}`,
       sender_id: userId,
       content: newMessage,
-      timestamp: null, // Avoid using `new Date()` here
+      timestamp: null,
     }
 
     setMessages((prevMessages) => [...prevMessages, tempMessage])
@@ -82,11 +86,16 @@ export default function ChatPage() {
 
   const handleGetSummary = async () => {
     if (id) {
+      setIsLoadingSummary(true)
       try {
         const result = await getSummary(id)
-        setSummary(result.summary.summary)
+        const summaryText = result.summary?.summary || "No summary available."
+        setSummary(summaryText)
       } catch (error) {
-        console.error('Failed to get summary:', error)
+        console.error("Failed to get summary:", error)
+        setSummary("Failed to load summary.")
+      } finally {
+        setIsLoadingSummary(false)
       }
     }
   }
@@ -96,11 +105,37 @@ export default function ChatPage() {
       <header className="bg-zinc-800 p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Chat</h1>
         {id && (
-          <Button onClick={handleGetSummary} className="bg-violet-600 hover:bg-violet-700">
-            Summarize Chat
+          <Button 
+            onClick={handleGetSummary} 
+            className="bg-violet-600 hover:bg-violet-700 transition-colors"
+            disabled={isLoadingSummary}
+          >
+            {isLoadingSummary ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Loading...
+              </>
+            ) : (
+              'Catch Up'
+            )}
           </Button>
         )}
       </header>
+      
+      {summary !== null && (
+        <div className="bg-zinc-700 p-4 m-4 rounded-lg relative">
+          <button 
+            onClick={handleCloseSummary}
+            className="absolute top-2 right-2 text-zinc-400 hover:text-white"
+            aria-label="Close summary"
+          >
+            ✕
+          </button>
+          <h2 className="text-lg font-semibold mb-2 text-white">Chat Summary</h2>
+          <p className="text-zinc-100 pr-6">{summary}</p>
+        </div>
+      )}
+
       {id ? (
         <div className="flex-1 overflow-y-auto p-4 space-y-4">
           {messages.map((message, index) => (
@@ -117,6 +152,7 @@ export default function ChatPage() {
           <p className="text-zinc-400">Select a chat or create a new one to start messaging</p>
         </div>
       )}
+
       {id && (
         <div className="p-4 bg-zinc-800">
           <div className="flex space-x-2">
