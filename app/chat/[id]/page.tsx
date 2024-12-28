@@ -6,9 +6,11 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { getMessages, sendMessage, getSummary } from '../../services/api'
 import { Loader2 } from 'lucide-react' // Add this import
+import { useUserId } from '@/hooks/useUserId'
 
 export default function ChatPage() {
   const { id } = useParams()
+  const userId = useUserId()
   const [messages, setMessages] = useState([])
   const [newMessage, setNewMessage] = useState('')
   const [summary, setSummary] = useState(null)
@@ -51,9 +53,8 @@ export default function ChatPage() {
   }, [id])
 
   const handleSendMessage = async () => {
-    if (!id || !newMessage.trim()) return
+    if (!id || !newMessage.trim() || !userId) return
 
-    const userId = '43398710-349f-41da-b29b-0f90094fafdc'
     const tempMessage = {
       tempId: `temp-${Date.now()}`,
       sender_id: userId,

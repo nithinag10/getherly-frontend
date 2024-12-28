@@ -25,7 +25,12 @@ export async function login(prevState: any, formData: FormData) {
     const data = await response.json();
 
     cookies().set("token", data.token, {
-      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      maxAge: 60 * 60 * 24 * 7, // 1 week
+      path: "/",
+    });
+
+    cookies().set("userId", data.user_id, {
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
@@ -61,7 +66,6 @@ export async function register(prevState: any, formData: FormData) {
     const data = await response.json();
 
     cookies().set("token", data.token, {
-      httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",

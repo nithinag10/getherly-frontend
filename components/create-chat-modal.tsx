@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { createChat } from '../services/api'
+import { useUserId } from '@/hooks/useUserId'
 
 interface CreateChatModalProps {
   isOpen: boolean
@@ -13,13 +14,18 @@ interface CreateChatModalProps {
 
 export function CreateChatModal({ isOpen, onClose }: CreateChatModalProps) {
   const router = useRouter()
+  const userId = useUserId()
   const [chatName, setChatName] = useState('')
   const [agenda, setAgenda] = useState('')
   const [error, setError] = useState('')
 
   const handleCreateChat = async () => {
+    if (!userId) {
+      setError('User not authenticated')
+      return
+    }
+
     try {
-      const userId = '43398710-349f-41da-b29b-0f90094fafdc' // This should be dynamically set based on the logged-in user
       const result = await createChat(userId, chatName, agenda)
       if (result && result.chat && result.chat.id) {
         router.push(`/chat/${result.chat.id}`)

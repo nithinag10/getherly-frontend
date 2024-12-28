@@ -1,50 +1,80 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { useRouter } from 'next/navigation'
+import { getUserChats } from '../../services/api'
+import { useUserId } from '@/hooks/useUserId'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { CreateChatModal } from '../../components/create-chat-modal'
 import { JoinChatModal } from '../../components/join-chat-modal'
 
 export default function Dashboard() {
+  const router = useRouter()
+  const userId = useUserId()
+  const [chats, setChats] = useState([])
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
 
+  useEffect(() => {
+    const loadChats = async () => {
+      if (!userId) return
+      try {
+        const response = await getUserChats(userId)
+        setChats(response.chats)
+      } catch (error) {
+        console.error('Failed to load chats:', error)
+      }
+    }
+    loadChats()
+  }, [userId])
+
+  const handleChatClick = (chatId: string) => {
+    router.push(`/chat/${chatId}`)
+  }
+
   return (
-    <div className="min-h-screen bg-zinc-900 text-zinc-100">
-      <header className="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
-        <div className="container flex h-16 items-center">
-          <span className="text-lg font-semibold tracking-tight">Gatherly</span>
+    <div className="flex h-screen bg-zinc-900">
+      {/* Sidebar */}
+      <div className="w-80 border-r border-zinc-800 flex flex-col">
+        <div className="p-4 border-b border-zinc-800">
+          <div className="space-y-2">
+            <Button 
+              className="w-full bg-violet-600 hover:bg-violet-700"
+              onClick={() => setIsCreateModalOpen(true)}
+            >
+              Create Chat
+            </Button>
+            <Button 
+              className="w-full bg-zinc-700 hover:bg-zinc-600"
+              onClick={() => setIsJoinModalOpen(true)}
+            >
+              Join Chat
+            </Button>
+          </div>
         </div>
-      </header>
-
-      <main className="container mx-auto p-4">
-        <div className="grid md:grid-cols-4 gap-4">
-          <Card className="md:col-span-1 bg-zinc-800 border-zinc-700">
-            <CardHeader>
-              <CardTitle className="text-zinc-100">Recent Chats</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-zinc-400">No recent chats</p>
-            </CardContent>
-          </Card>
-
-          <Card className="md:col-span-3 bg-zinc-800 border-zinc-700">
-            <CardHeader>
-              <CardTitle className="text-zinc-100">Welcome to Gatherly</CardTitle>
-              <CardDescription className="text-zinc-400">Start a new chat or join an existing one</CardDescription>
-            </CardHeader>
-            <CardContent className="flex justify-center gap-4">
-              <Button onClick={() => setIsCreateModalOpen(true)} className="bg-violet-600 hover:bg-violet-700">
-                Create Chat
-              </Button>
-              <Button onClick={() => setIsJoinModalOpen(true)} className="bg-zinc-700 hover:bg-zinc-600">
-                Join Chat
-              </Button>
-            </CardContent>
-          </Card>
+        
+        <div className="flex-1 overflow-y-auto">
+          {chats.map((chat) => (
+            <div
+              key={chat.id}
+              onClick={() => handleChatClick(chat.id)}
+              className="p-4 hover:bg-zinc-800 cursor-pointer border-b border-zinc-800"
+            >
+              <h3 className="font-semibold text-zinc-100">{chat.chat_name}</h3>
+              <p className="text-sm text-zinc-400 truncate">{chat.agenda}</p>
+              {chat.last_message && (
+                <p className="text-sm text-zinc-500 mt-1 truncate">{chat.last_message}</p>
+              )}
+              <p className="text-xs text-zinc-600 mt-1">{chat.participant_count} participants</p>
+            </div>
+          ))}
         </div>
-      </main>
+      </div>
+
+      {/* Main Content */}
+      <div className="flex-1 flex items-center justify-center">
+        <p className="text-xl text-zinc-400">Select a chat or create a new one to get started</p>
+      </div>
 
       <CreateChatModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
       <JoinChatModal isOpen={isJoinModalOpen} onClose={() => setIsJoinModalOpen(false)} />

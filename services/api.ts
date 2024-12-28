@@ -137,3 +137,9 @@ export function getAuthHeaders(): HeadersInit {
     Authorization: token ? `Bearer ${token}` : "",
   };
 }
+
+export async function getUserChats(userId: string) {
+  const response = await fetch(`${API_BASE_URL}/chats/user/${userId}/chats`);
+  if (!response.ok) throw new Error("Failed to fetch chats");
+  return response.json();
+}

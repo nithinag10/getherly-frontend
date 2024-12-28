@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { joinChat } from '../services/api'
+import { useUserId } from '@/hooks/useUserId'
 
 interface JoinChatModalProps {
   isOpen: boolean
@@ -14,10 +15,15 @@ interface JoinChatModalProps {
 export function JoinChatModal({ isOpen, onClose }: JoinChatModalProps) {
   const router = useRouter()
   const [joinCode, setJoinCode] = useState('')
+  const userId = useUserId()
 
   const handleJoinChat = async () => {
+    if (!userId) {
+      console.error('User not authenticated')
+      return
+    }
+
     try {
-      const userId = '1' // This should be dynamically set based on the logged-in user
       await joinChat(joinCode, userId)
       router.push(`/chat/${joinCode}`)
     } catch (error) {
