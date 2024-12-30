@@ -26,9 +26,6 @@ export default function RootLayout({
         {isChatRoute ? (
           // Your existing chat layout
           <div className="flex h-screen">
-            <aside className="w-64 bg-zinc-800 p-4 overflow-y-auto">
-              {/* Chat sidebar content */}
-            </aside>
             <main className="flex-1 overflow-hidden">
               {children}
             </main>
