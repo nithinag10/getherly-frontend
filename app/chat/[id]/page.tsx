@@ -5,15 +5,25 @@ import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { getMessages, sendMessage, getSummary } from '../../services/api'
-import { Loader2 } from 'lucide-react' // Add this import
+import { Loader2 } from 'lucide-react'
 import { useUserId } from '@/hooks/useUserId'
 
+// Define the Message interface
+interface Message {
+  id?: string; // Optional, as temp messages won't have an ID initially
+  tempId?: string; // Temporary ID for client-side tracking
+  sender_id: string;
+  content: string;
+  timestamp?: string | null; // Optional timestamp
+}
+
 export default function ChatPage() {
-  const { id } = useParams()
+  const { id: routeId } = useParams()
   const userId = useUserId()
-  const [messages, setMessages] = useState([])
+  const id = Array.isArray(routeId) ? routeId[0] : routeId 
+  const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
-  const [summary, setSummary] = useState(null)
+  const [summary, setSummary] = useState<string | null>(null)
   const [isLoadingSummary, setIsLoadingSummary] = useState(false)
 
   const handleCloseSummary = () => {
@@ -21,30 +31,38 @@ export default function ChatPage() {
   }
 
   useEffect(() => {
-    if (!id) return;
+    if (!id) return
 
     const fetchMessages = async () => {
       try {
-        const result = await getMessages(id);
+        const result = await getMessages(id)
 
-        const fetchedMessages = Array.isArray(result.messages) ? result.messages : [];
+        const fetchedMessages: Message[] = Array.isArray(result.messages)
+          ? result.messages.map((msg: Message) => ({
+              id: msg.id,
+              sender_id: msg.sender_id,
+              content: msg.content,
+              timestamp: msg.timestamp,
+            }))
+          : []
+
         setMessages((prevMessages) => {
-          const existingMessageMap = new Map(
-            prevMessages.map((msg) => [msg.id || msg.tempId, msg])
-          );
+          const existingMessageMap = new Map<string, Message>(
+            prevMessages.map((msg) => [msg.id || msg.tempId || '', msg])
+          )
 
           const reconciledMessages = fetchedMessages.map((msg) =>
-            existingMessageMap.has(msg.id)
-              ? { ...existingMessageMap.get(msg.id), ...msg }
+            existingMessageMap.has(msg.id || '')
+              ? { ...existingMessageMap.get(msg.id || ''), ...msg }
               : msg
-          );
+          )
 
-          return reconciledMessages;
-        });
+          return reconciledMessages
+        })
       } catch (error) {
-        console.error("Failed to fetch messages:", error);
+        console.error("Failed to fetch messages:", error)
       }
-    };
+    }
 
     fetchMessages()
     const interval = setInterval(fetchMessages, 10000)
@@ -55,7 +73,7 @@ export default function ChatPage() {
   const handleSendMessage = async () => {
     if (!id || !newMessage.trim() || !userId) return
 
-    const tempMessage = {
+    const tempMessage: Message = {
       tempId: `temp-${Date.now()}`,
       sender_id: userId,
       content: newMessage,

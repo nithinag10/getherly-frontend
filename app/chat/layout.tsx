@@ -8,31 +8,45 @@ import { Button } from '@/components/ui/button'
 import { CreateChatModal } from '@/components/create-chat-modal'
 import { JoinChatModal } from '@/components/join-chat-modal'
 
+// Define the Chat interface
+interface Chat {
+  id: string;
+  chat_name: string;
+  agenda: string;
+  last_message?: string;
+  participant_count: number;
+}
+
+// Define the API response type
+interface GetUserChatsResponse {
+  chats: Chat[];
+}
+
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
-  const router = useRouter()
-  const userId = useUserId()
-  const [chats, setChats] = useState([])
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false)
+  const router = useRouter();
+  const userId = useUserId();
+  const [chats, setChats] = useState<Chat[]>([]);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
   useEffect(() => {
-    if (!userId) return
-    
+    if (!userId) return;
+
     const loadChats = async () => {
       try {
-        const response = await getUserChats(userId)
-        setChats(response.chats)
+        const response: GetUserChatsResponse = await getUserChats(userId);
+        setChats(response.chats);
       } catch (error) {
-        console.error('Failed to load chats:', error)
+        console.error('Failed to load chats:', error);
       }
-    }
+    };
 
-    loadChats()
-  }, [userId])
+    loadChats();
+  }, [userId]);
 
   const handleChatClick = (chatId: string) => {
-    router.push(`/chat/${chatId}`)
-  }
+    router.push(`/chat/${chatId}`);
+  };
 
   return (
     <div className="flex h-screen bg-zinc-900">
@@ -86,5 +100,5 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
       <CreateChatModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
       <JoinChatModal isOpen={isJoinModalOpen} onClose={() => setIsJoinModalOpen(false)} />
     </div>
-  )
+  );
 }

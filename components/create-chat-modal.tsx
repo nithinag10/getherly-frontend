@@ -34,8 +34,7 @@ export function CreateChatModal({ isOpen, onClose }: CreateChatModalProps) {
         throw new Error('Invalid response from server')
       }
     } catch (error) {
-      // print stack trace error
-      console.log(error.stack);
+      console.error("Failed: ", error)
       // You might want to set an error state here and display it to the user
       setError('Failed to create chat. Please try again.')
     }

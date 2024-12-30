@@ -6,11 +6,11 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { ChevronRight } from 'lucide-react'
-import { inter } from "./fonts"
+import { Inter } from '@next/font/google'
 import Image from "next/image"
 
 export default function LandingPage() {
+  const inter = Inter({ subsets: ['latin'] })
   return (
     <div className={`min-h-screen bg-zinc-900 text-zinc-100 ${inter.className}`}>
       <header className="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
@@ -139,7 +139,7 @@ export default function LandingPage() {
                 <li>Basic AI summary for each chat</li>
                 <li>Standard privacy controls</li>
               </ul>
-              <Button className="w-full" variant="secondary" className="bg-zinc-700 hover:bg-zinc-600">
+              <Button variant="secondary" className="bg-zinc-700 hover:bg-zinc-600">
                 Get Started
               </Button>
             </CardContent>

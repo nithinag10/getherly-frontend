@@ -1,8 +1,11 @@
 "use server";
 
-import { cookies } from "next/headers";
+import { NextResponse } from "next/server";
 
-export async function login(prevState: any, formData: FormData) {
+export async function login(
+  state: { success: boolean; error: string | null },
+  formData: FormData
+): Promise<{ success: boolean; error: string | null }> {
   try {
     const email = formData.get("email");
     const password = formData.get("password");
@@ -24,13 +27,14 @@ export async function login(prevState: any, formData: FormData) {
 
     const data = await response.json();
 
-    cookies().set("token", data.token, {
+    const res = NextResponse.json({ success: true });
+    res.cookies.set("token", data.token, {
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
     });
 
-    cookies().set("userId", data.user_id, {
+    res.cookies.set("userId", data.user_id, {
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
@@ -38,11 +42,17 @@ export async function login(prevState: any, formData: FormData) {
 
     return { success: true, error: null };
   } catch (error) {
-    return { success: false, error: "Something went wrong" };
+    return {
+      success: false,
+      error: error instanceof Error ? error.message : "Unknown error",
+    };
   }
 }
 
-export async function register(prevState: any, formData: FormData) {
+export async function register(
+  state: { success: boolean; error: string | null },
+  formData: FormData
+): Promise<{ success: boolean; error: string | null }> {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
   const name = formData.get("name") as string;
@@ -65,14 +75,18 @@ export async function register(prevState: any, formData: FormData) {
 
     const data = await response.json();
 
-    cookies().set("token", data.token, {
+    const res = NextResponse.json({ success: true });
+    res.cookies.set("token", data.token, {
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 24 * 7, // 1 week
       path: "/",
     });
 
-    return { success: true };
-  } catch (error) {
-    return { success: false, error: "Registration failed. Please try again." };
+    return { success: true, error: null };
+  } catch (err) {
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Unknown error",
+    };
   }
 }

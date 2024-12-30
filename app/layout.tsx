@@ -2,13 +2,8 @@
 
 import { Inter } from 'next/font/google'
 import './globals.css'
-import { useState, useEffect, useCallback } from 'react'
-import { useRouter, usePathname } from 'next/navigation'
-import { Button } from '@/components/ui/button'
-import { CreateChatModal } from '../components/create-chat-modal'
-import { JoinChatModal } from '../components/join-chat-modal'
-import { getRecentChats } from './services/api'
-import { LandingPage } from '@/components/landing_page'
+import {usePathname } from 'next/navigation'
+
 
 const inter = Inter({ subsets: ['latin'] })
 

@@ -1,4 +1,3 @@
-import { LoginForm } from '@/components/login-form'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import {
@@ -7,7 +6,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { ChevronRight } from 'lucide-react'
 import Image from "next/image"
 
 export function LandingPage() {
