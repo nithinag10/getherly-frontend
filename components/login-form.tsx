@@ -103,7 +103,7 @@ export default function LoginForm() {
       </CardContent>
       <CardFooter className="flex flex-col items-center">
         <p className="text-sm text-zinc-400">
-          Don't have an account? <Link href="/register" className="text-violet-400 hover:underline">Register</Link>
+          Don&apos;t have an account? <Link href="/register" className="text-violet-400 hover:underline">Register</Link>
         </p>
       </CardFooter>
     </Card>

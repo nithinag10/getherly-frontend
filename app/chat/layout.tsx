@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { getUserChats } from '@/services/api'
 import { useUserId } from '@/hooks/useUserId'
@@ -29,7 +29,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
-  const loadChats = async () => {
+  const loadChats = useCallback(async () => {
     if (!userId) return;
     try {
       const response: GetUserChatsResponse = await getUserChats(userId);
@@ -37,11 +37,11 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
     } catch (error) {
       console.error('Failed to load chats:', error);
     }
-  };
+  }, [userId]); // userId as dependency
 
   useEffect(() => {
     loadChats();
-  }, [userId]);
+  }, [userId, loadChats]); // Add loadChats to dependencies
 
   const handleChatClick = (chatId: string) => {
     router.push(`/chat/${chatId}`);
