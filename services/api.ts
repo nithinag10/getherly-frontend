@@ -118,7 +118,7 @@ export async function register(
   });
 
   if (!response.ok) {
-    throw new Error("Registration failed");
+    throw new Error("Registration failed in apis.ts");
   }
 
   return response.json();

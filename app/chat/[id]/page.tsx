@@ -1,18 +1,20 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { getMessages, sendMessage, getSummary } from '../../services/api'
-import { Loader2 } from 'lucide-react'
+import { Loader2, Copy } from 'lucide-react'
 import { useUserId } from '@/hooks/useUserId'
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
 // Define the Message interface
 interface Message {
   id?: string; // Optional, as temp messages won't have an ID initially
   tempId?: string; // Temporary ID for client-side tracking
   sender_id: string;
+  sender_name?: string;
   content: string;
   timestamp?: string | null; // Optional timestamp
 }
@@ -20,11 +22,21 @@ interface Message {
 export default function ChatPage() {
   const { id: routeId } = useParams()
   const userId = useUserId()
-  const id = Array.isArray(routeId) ? routeId[0] : routeId 
+  const id = Array.isArray(routeId) ? routeId[0] : routeId
   const [messages, setMessages] = useState<Message[]>([])
   const [newMessage, setNewMessage] = useState('')
   const [summary, setSummary] = useState<string | null>(null)
   const [isLoadingSummary, setIsLoadingSummary] = useState(false)
+  const messagesEndRef = useRef<HTMLDivElement>(null)
+  const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages])
 
   const handleCloseSummary = () => {
     setSummary(null)
@@ -40,7 +52,7 @@ export default function ChatPage() {
         const fetchedMessages: Message[] = Array.isArray(result.messages)
           ? result.messages.map((msg: Message) => ({
               id: msg.id,
-              sender_id: msg.sender_id,
+              sender_id: msg.sender_name,
               content: msg.content,
               timestamp: msg.timestamp,
             }))
@@ -60,7 +72,7 @@ export default function ChatPage() {
           return reconciledMessages
         })
       } catch (error) {
-        console.error("Failed to fetch messages:", error)
+        console.error('Failed to fetch messages:', error)
       }
     }
 
@@ -108,14 +120,20 @@ export default function ChatPage() {
       setIsLoadingSummary(true)
       try {
         const result = await getSummary(id)
-        const summaryText = result.summary?.summary || "No summary available."
+        const summaryText = result.summary?.summary || 'No summary available.'
         setSummary(summaryText)
       } catch (error) {
-        console.error("Failed to get summary:", error)
-        setSummary("Failed to load summary.")
+        console.error('Failed to get summary:', error)
+        setSummary('Failed to load summary.')
       } finally {
         setIsLoadingSummary(false)
       }
+    }
+  }
+
+  const handleCopyInviteCode = async () => {
+    if (id) {
+      await navigator.clipboard.writeText(id)
     }
   }
 
@@ -124,26 +142,34 @@ export default function ChatPage() {
       <header className="bg-zinc-800 p-4 flex justify-between items-center">
         <h1 className="text-xl font-bold">Chat</h1>
         {id && (
-          <Button 
-            onClick={handleGetSummary} 
-            className="bg-violet-600 hover:bg-violet-700 transition-colors"
-            disabled={isLoadingSummary}
-          >
-            {isLoadingSummary ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Loading...
-              </>
-            ) : (
-              'Catch Up'
-            )}
-          </Button>
+          <div className="flex gap-2">
+            <Button
+              onClick={() => setIsInviteModalOpen(true)}
+              className="bg-violet-600 hover:bg-violet-700 transition-colors"
+            >
+              Invite
+            </Button>
+            <Button
+              onClick={handleGetSummary}
+              className="bg-violet-600 hover:bg-violet-700 transition-colors"
+              disabled={isLoadingSummary}
+            >
+              {isLoadingSummary ? (
+                <>
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                  Loading...
+                </>
+              ) : (
+                'Catch Up'
+              )}
+            </Button>
+          </div>
         )}
       </header>
-      
+
       {summary !== null && (
         <div className="bg-zinc-700 p-4 m-4 rounded-lg relative">
-          <button 
+          <button
             onClick={handleCloseSummary}
             className="absolute top-2 right-2 text-zinc-400 hover:text-white"
             aria-label="Close summary"
@@ -156,7 +182,7 @@ export default function ChatPage() {
       )}
 
       {id ? (
-        <div className="flex-1 overflow-y-auto p-4 space-y-4">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 h-0">
           {messages.map((message, index) => (
             <div key={message.id || message.tempId || index} className="bg-zinc-800 p-3 rounded-lg">
               <p>
@@ -165,6 +191,7 @@ export default function ChatPage() {
               </p>
             </div>
           ))}
+          <div ref={messagesEndRef} />
         </div>
       ) : (
         <div className="p-4 bg-zinc-800 text-center">
@@ -187,6 +214,28 @@ export default function ChatPage() {
           </div>
         </div>
       )}
+
+      {/* Invite Modal */}
+      <Dialog open={isInviteModalOpen} onOpenChange={setIsInviteModalOpen}>
+        <DialogContent className="bg-zinc-800 border border-zinc-700 text-zinc-100">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold text-zinc-100">Invite to Chat</DialogTitle>
+          </DialogHeader>
+          <div className="p-6">
+            <p className="text-sm text-zinc-400 mb-4">Share this chat ID with others to invite them:</p>
+            <div className="flex items-center gap-2 p-3 bg-zinc-900 rounded-lg">
+              <code className="flex-1 text-violet-400">{id}</code>
+              <Button 
+                onClick={handleCopyInviteCode} 
+                size="sm"
+                className="bg-violet-600 hover:bg-violet-700"
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }

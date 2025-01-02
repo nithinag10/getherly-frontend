@@ -10,9 +10,10 @@ import { useUserId } from '@/hooks/useUserId'
 interface JoinChatModalProps {
   isOpen: boolean
   onClose: () => void
+  onSuccess: () => void
 }
 
-export function JoinChatModal({ isOpen, onClose }: JoinChatModalProps) {
+export function JoinChatModal({ isOpen, onClose, onSuccess }: JoinChatModalProps) {
   const router = useRouter()
   const [joinCode, setJoinCode] = useState('')
   const userId = useUserId()
@@ -25,7 +26,9 @@ export function JoinChatModal({ isOpen, onClose }: JoinChatModalProps) {
 
     try {
       await joinChat(joinCode, userId)
+      await onSuccess() // Reload chats
       router.push(`/chat/${joinCode}`)
+      onClose()
     } catch (error) {
       console.error('Failed to join chat:', error)
     }

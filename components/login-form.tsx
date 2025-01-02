@@ -1,41 +1,64 @@
-'use client'
+"use client";
 
-import { useFormStatus, useFormState } from 'react-dom'
-import { login } from '@/app/actions/auth'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Alert, AlertDescription } from '@/components/ui/alert'
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import { Alert, AlertDescription } from '@/components/ui/alert';
+import Link from 'next/link';
 
-const initialState = {
-  error: null,
-  success: false,
-}
+export default function LoginForm() {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState<string | null>(null);
+  const [isPending, setIsPending] = useState(false);
+  const router = useRouter();
 
-export function LoginForm() {
-  const [state, formAction] = useFormState(login, initialState)
-  const { pending } = useFormStatus()
-  const router = useRouter()
+  async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setIsPending(true);
+    setError(null);
 
-  useEffect(() => {
-    if (state?.success) {
-      router.push('/dashboard')
+    try {
+      const response = await fetch(
+        "https://gatherly-app-592179280005.us-central1.run.app/api/auth/login",
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email, password }),
+        }
+      );
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data?.error || "Login failed");
+      }
+
+      const data = await response.json();
+
+      document.cookie = `token=${data.token}; path=/; max-age=${60 * 60 * 24 * 7}`;
+      document.cookie = `userId=${data.user_id}; path=/; max-age=${60 * 60 * 24 * 7}`;
+
+      router.push("/chat");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Something went wrong");
+    } finally {
+      setIsPending(false);
     }
-  }, [state?.success, router])
+  }
 
   return (
     <Card className="w-[350px] bg-zinc-800 border-zinc-700 text-zinc-100">
       <CardHeader>
         <CardTitle>Login</CardTitle>
         <CardDescription className="text-zinc-400">
-          Enter your email and password to login.
+          Welcome back! Please login to your account.
         </CardDescription>
       </CardHeader>
       <CardContent>
-        <form action={formAction}>
+        <form onSubmit={handleSubmit}>
           <div className="grid w-full items-center gap-4">
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="email">Email</Label>
@@ -44,7 +67,10 @@ export function LoginForm() {
                 name="email"
                 type="email"
                 required
-                className="bg-zinc-700 border-zinc-600 text-zinc-100"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Enter your email"
+                className="bg-zinc-700 border-zinc-600 text-zinc-100 placeholder-zinc-400"
               />
             </div>
             <div className="flex flex-col space-y-1.5">
@@ -54,20 +80,32 @@ export function LoginForm() {
                 name="password"
                 type="password"
                 required
-                className="bg-zinc-700 border-zinc-600 text-zinc-100"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Enter your password"
+                className="bg-zinc-700 border-zinc-600 text-zinc-100 placeholder-zinc-400"
               />
             </div>
-            {state?.error && (
-              <Alert variant="destructive">
-                <AlertDescription>{state.error}</AlertDescription>
-              </Alert>
-            )}
-            <Button type="submit" disabled={pending}>
-              {pending ? 'Logging in...' : 'Login'}
-            </Button>
           </div>
+          {error && (
+            <Alert variant="destructive" className="mt-4">
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          <Button 
+            className="w-full mt-4 bg-violet-600 hover:bg-violet-700" 
+            type="submit" 
+            disabled={isPending}
+          >
+            {isPending ? "Logging in..." : "Login"}
+          </Button>
         </form>
       </CardContent>
+      <CardFooter className="flex flex-col items-center">
+        <p className="text-sm text-zinc-400">
+          Don't have an account? <Link href="/register" className="text-violet-400 hover:underline">Register</Link>
+        </p>
+      </CardFooter>
     </Card>
-  )
+  );
 }

@@ -8,7 +8,7 @@ import { Button } from '@/components/ui/button'
 import { CreateChatModal } from '@/components/create-chat-modal'
 import { JoinChatModal } from '@/components/join-chat-modal'
 
-// Define the Chat interface
+
 interface Chat {
   id: string;
   chat_name: string;
@@ -17,7 +17,7 @@ interface Chat {
   participant_count: number;
 }
 
-// Define the API response type
+
 interface GetUserChatsResponse {
   chats: Chat[];
 }
@@ -29,18 +29,17 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isJoinModalOpen, setIsJoinModalOpen] = useState(false);
 
-  useEffect(() => {
+  const loadChats = async () => {
     if (!userId) return;
+    try {
+      const response: GetUserChatsResponse = await getUserChats(userId);
+      setChats(response.chats);
+    } catch (error) {
+      console.error('Failed to load chats:', error);
+    }
+  };
 
-    const loadChats = async () => {
-      try {
-        const response: GetUserChatsResponse = await getUserChats(userId);
-        setChats(response.chats);
-      } catch (error) {
-        console.error('Failed to load chats:', error);
-      }
-    };
-
+  useEffect(() => {
     loadChats();
   }, [userId]);
 
@@ -97,8 +96,16 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
         {children}
       </div>
 
-      <CreateChatModal isOpen={isCreateModalOpen} onClose={() => setIsCreateModalOpen(false)} />
-      <JoinChatModal isOpen={isJoinModalOpen} onClose={() => setIsJoinModalOpen(false)} />
+      <CreateChatModal 
+        isOpen={isCreateModalOpen} 
+        onClose={() => setIsCreateModalOpen(false)}
+        onSuccess={loadChats}
+      />
+      <JoinChatModal 
+        isOpen={isJoinModalOpen} 
+        onClose={() => setIsJoinModalOpen(false)}
+        onSuccess={loadChats}
+      />
     </div>
   );
 }

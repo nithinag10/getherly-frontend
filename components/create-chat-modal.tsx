@@ -10,9 +10,10 @@ import { useUserId } from '@/hooks/useUserId'
 interface CreateChatModalProps {
   isOpen: boolean
   onClose: () => void
+  onSuccess: () => void
 }
 
-export function CreateChatModal({ isOpen, onClose }: CreateChatModalProps) {
+export function CreateChatModal({ isOpen, onClose, onSuccess }: CreateChatModalProps) {
   const router = useRouter()
   const userId = useUserId()
   const [chatName, setChatName] = useState('')
@@ -28,6 +29,7 @@ export function CreateChatModal({ isOpen, onClose }: CreateChatModalProps) {
     try {
       const result = await createChat(userId, chatName, agenda)
       if (result && result.chat && result.chat.id) {
+        await onSuccess(); // Reload chats
         router.push(`/chat/${result.chat.id}`)
         onClose()
       } else {
