@@ -5,7 +5,7 @@ import { useParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { getMessages, sendMessage, getSummary } from '../../services/api'
-import { Loader2, Copy } from 'lucide-react'
+import { Loader2, Copy, X } from 'lucide-react'
 import { useUserId } from '@/hooks/useUserId'
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog'
 
@@ -29,6 +29,7 @@ export default function ChatPage() {
   const [isLoadingSummary, setIsLoadingSummary] = useState(false)
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const [isInviteModalOpen, setIsInviteModalOpen] = useState(false)
+  const [isSummaryOpen, setIsSummaryOpen] = useState(false)
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' })
@@ -137,6 +138,12 @@ export default function ChatPage() {
     }
   }
 
+  const handleCopySummary = async () => {
+    if (summary) {
+      await navigator.clipboard.writeText(summary)
+    }
+  }
+
   return (
     <div className="flex flex-col h-screen bg-zinc-900">
       <header className="bg-zinc-800 p-4 flex justify-between items-center">
@@ -150,7 +157,10 @@ export default function ChatPage() {
               Invite
             </Button>
             <Button
-              onClick={handleGetSummary}
+              onClick={() => {
+                handleGetSummary()
+                setIsSummaryOpen(true)
+              }}
               className="bg-violet-600 hover:bg-violet-700 transition-colors"
               disabled={isLoadingSummary}
             >
@@ -167,17 +177,71 @@ export default function ChatPage() {
         )}
       </header>
 
+      {/* Summary Dialog */}
+      <Dialog open={isSummaryOpen && summary !== null} onOpenChange={setIsSummaryOpen}>
+        <DialogContent className="bg-zinc-800 border-zinc-700 text-zinc-100 max-w-2xl">
+          <DialogHeader>
+            <DialogTitle className="text-lg font-semibold flex justify-between items-center">
+              Chat Summary
+              <div className="flex gap-2">
+                <Button
+                  onClick={handleCopySummary}
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-zinc-700"
+                >
+                  <Copy className="h-4 w-4" />
+                </Button>
+                <Button
+                  onClick={() => setIsSummaryOpen(false)}
+                  variant="ghost"
+                  size="icon"
+                  className="hover:bg-zinc-700"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          <div className="text-zinc-100 pr-6 space-y-4 whitespace-pre-wrap leading-relaxed max-h-[70vh] overflow-y-auto">
+            {summary?.split('\n').map((paragraph, index) => (
+              <p key={index} className={`
+                ${paragraph.includes('🔍') ? 'text-violet-400 font-semibold mt-6' : ''}
+                ${paragraph.includes('👥') ? 'text-violet-400 font-semibold mt-6' : ''}
+                ${paragraph.includes('⏳') ? 'text-violet-400 font-semibold mt-6' : ''}
+                ${paragraph.includes('📋') ? 'text-violet-400 font-semibold mt-6' : ''}
+                ${paragraph.includes('🎉') ? 'text-violet-400 font-semibold mt-6' : ''}
+              `}>
+                {paragraph}
+              </p>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
+
       {summary !== null && (
-        <div className="bg-zinc-700 p-4 m-4 rounded-lg relative">
+        <div className="bg-zinc-700 p-6 m-4 rounded-lg relative">
           <button
             onClick={handleCloseSummary}
-            className="absolute top-2 right-2 text-zinc-400 hover:text-white"
+            className="absolute top-4 right-4 text-zinc-400 hover:text-white"
             aria-label="Close summary"
           >
             ✕
           </button>
-          <h2 className="text-lg font-semibold mb-2 text-white">Chat Summary</h2>
-          <p className="text-zinc-100 pr-6">{summary}</p>
+          <h2 className="text-lg font-semibold mb-4 text-white">Chat Summary</h2>
+          <div className="text-zinc-100 pr-6 space-y-4 whitespace-pre-wrap leading-relaxed">
+            {summary.split('\n').map((paragraph, index) => (
+              <p key={index} className={`
+                ${paragraph.includes('🔍') ? 'text-violet-400 font-semibold mt-6' : ''}
+                ${paragraph.includes('👥') ? 'text-violet-400 font-semibold mt-6' : ''}
+                ${paragraph.includes('⏳') ? 'text-violet-400 font-semibold mt-6' : ''}
+                ${paragraph.includes('📋') ? 'text-violet-400 font-semibold mt-6' : ''}
+                ${paragraph.includes('🎉') ? 'text-violet-400 font-semibold mt-6' : ''}
+              `}>
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </div>
       )}
 
