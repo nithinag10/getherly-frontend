@@ -59,15 +59,6 @@ export default function ChatPage() {
             }))
           : [];
 
-        // Add anchor message at the end
-        const anchorMessage: Message = {
-          content: "Yo squad! 🌟 Let's focus up—trip needs our big brain energy 🧠⚓",
-          id: "anchor-" + Date.now(),
-          sender_id: "The Anchor ⚓",
-          sender_name: "The Anchor ⚓",
-          timestamp: new Date().toISOString()
-        };
-
         setMessages((prevMessages) => {
           const existingMessageMap = new Map<string, Message>(
             prevMessages.map((msg) => [msg.id || msg.tempId || '', msg])
