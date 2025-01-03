@@ -1,3 +1,4 @@
+import Image from 'next/image'
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { MessageSquare, Share2, FileText } from 'lucide-react'
@@ -40,7 +41,11 @@ export function LandingPage() {
               <Button size="lg" className="bg-violet-600 hover:bg-violet-700" asChild>
                 <Link href="/register">Create Your First Chat</Link>
               </Button>
-              <Button size="lg" variant="secondary" className="bg-zinc-800 hover:bg-zinc-700" asChild>
+              <Button 
+                size="lg" 
+                className="bg-zinc-700 hover:bg-zinc-600 border border-violet-500/30 text-violet-100" 
+                asChild
+              >
                 <Link href="#how-it-works">
                   See How It Works
                 </Link>
@@ -98,10 +103,13 @@ export function LandingPage() {
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700">
-                <img 
-                  src="/screenshot_1.png" 
-                  alt="Quick join interface" 
+                <Image 
+                  src="/screenshot_1.png"
+                  alt="Quick join interface"
+                  width={1920}
+                  height={1080}
                   className="w-full h-auto"
+                  priority
                 />
               </div>
             </div>
@@ -109,9 +117,11 @@ export function LandingPage() {
             {/* Feature 2 */}
             <div className="grid md:grid-cols-2 gap-12 items-center mb-24 md:grid-flow-row-dense">
               <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700 md:order-1">
-                <img 
-                  src="/screenshot_3.png" 
-                  alt="AI assistant in action" 
+                <Image 
+                  src="/screenshot_3.png"
+                  alt="AI assistant in action"
+                  width={1920}
+                  height={1080}
                   className="w-full h-auto"
                 />
               </div>
@@ -134,9 +144,11 @@ export function LandingPage() {
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700">
-                <img 
-                  src="/screenshot_2.png" 
-                  alt="Summary interface" 
+                <Image 
+                  src="/screenshot_2.png"
+                  alt="Summary interface"
+                  width={1920}
+                  height={1080}
                   className="w-full h-auto"
                 />
               </div>
@@ -164,7 +176,7 @@ export function LandingPage() {
 
               <div className="space-y-4 mb-8">
                 <p className="text-zinc-300">
-                  We're offering completely free access to early adopters like you who help shape our product.
+                  We&apos;re offering completely free access to early adopters like you who help shape our product.
                 </p>
                 <ul className="space-y-3">
                   {[
