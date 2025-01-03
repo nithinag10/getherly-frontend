@@ -1,12 +1,6 @@
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
-import Image from "next/image"
+import { MessageSquare, Share2, FileText } from 'lucide-react'
 
 export function LandingPage() {
   return (
@@ -20,9 +14,6 @@ export function LandingPage() {
               <span className="text-lg font-semibold tracking-tight">Gatherly</span>
             </Link>
             <nav className="flex items-center gap-6">
-              <Link href="#how-it-works" className="text-sm font-medium text-zinc-300 hover:text-zinc-100 transition-colors">
-                How It Works
-              </Link>
               <Link href="#pricing" className="text-sm font-medium text-zinc-300 hover:text-zinc-100 transition-colors">
                 Pricing
               </Link>
@@ -63,109 +54,145 @@ export function LandingPage() {
           <h2 className="text-2xl font-medium text-center bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
             How It Works
           </h2>
-          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto">
-            <div className="space-y-6">
-              <div className="aspect-video relative rounded-lg overflow-hidden bg-zinc-800">
-                <Image
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="Create your chat"
-                  fill
-                  className="object-cover"
-                />
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto px-4">
+            <div className="space-y-4 text-center">
+              <div className="mx-auto w-12 h-12 flex items-center justify-center bg-violet-600/10 rounded-lg">
+                <MessageSquare className="w-6 h-6 text-violet-400" />
               </div>
-              <Card className="bg-zinc-800 border-zinc-700">
-                <CardHeader>
-                  <CardTitle className="text-lg text-zinc-100">1. Create Your Chat</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-zinc-400">
-                    In just a few clicks, set up your chat room and define your agenda or topic.
-                  </p>
-                </CardContent>
-              </Card>
+              <h3 className="text-xl font-medium text-zinc-100">Create Your Space</h3>
+              <p className="text-zinc-400">Start a focused discussion space for your team, project, or study group in seconds.</p>
             </div>
 
-            <div className="space-y-6">
-              <div className="aspect-video relative rounded-lg overflow-hidden bg-zinc-800">
-                <Image
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="Invite participants"
-                  fill
-                  className="object-cover"
-                />
+            <div className="space-y-4 text-center">
+              <div className="mx-auto w-12 h-12 flex items-center justify-center bg-violet-600/10 rounded-lg">
+                <Share2 className="w-6 h-6 text-violet-400" />
               </div>
-              <Card className="bg-zinc-800 border-zinc-700">
-                <CardHeader>
-                  <CardTitle className="text-lg text-zinc-100">2. Invite Participants</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-zinc-400">
-                    Share a simple link or code with your friends, classmates, or colleagues.
-                  </p>
-                </CardContent>
-              </Card>
+              <h3 className="text-xl font-medium text-zinc-100">Instant Collaboration</h3>
+              <p className="text-zinc-400">Share a quick invite code with your team. No accounts needed—just join and start contributing right away.</p>
             </div>
 
-            <div className="space-y-6">
-              <div className="aspect-video relative rounded-lg overflow-hidden bg-zinc-800">
-                <Image
-                  src="/placeholder.svg?height=400&width=600"
-                  alt="Engage and discuss"
-                  fill
-                  className="object-cover"
+            <div className="space-y-4 text-center">
+              <div className="mx-auto w-12 h-12 flex items-center justify-center bg-violet-600/10 rounded-lg">
+                <FileText className="w-6 h-6 text-violet-400" />
+              </div>
+              <h3 className="text-xl font-medium text-zinc-100">Smart Summaries</h3>
+              <p className="text-zinc-400">Get AI-powered summaries of your discussions. Capture key points and decisions, then close the chat when done.</p>
+            </div>
+          </div>
+        </section>
+
+        {/* Features Showcase Section */}
+        <section className="py-24 bg-zinc-800/50">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-medium text-center bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent mb-16">
+              Why Choose Gatherly?
+            </h2>
+
+            {/* Feature 1 */}
+            <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
+              <div className="space-y-6">
+                <h3 className="text-2xl font-medium text-violet-400">Quick & Private Conversations</h3>
+                <p className="text-zinc-300 text-lg leading-relaxed">
+                  Join instantly with a simple code - no sign-ups required. Keep your discussions private 
+                  and maintain anonymity while collaborating with your team.
+                </p>
+              </div>
+              <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700">
+                <img 
+                  src="/screenshot_1.png" 
+                  alt="Quick join interface" 
+                  className="w-full h-auto"
                 />
               </div>
-              <Card className="bg-zinc-800 border-zinc-700">
-                <CardHeader>
-                  <CardTitle className="text-lg text-zinc-100">3. Engage & Discuss</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm text-zinc-400">
-                    Talk freely. Our AI tracks key points and decisions, so you never lose track.
-                  </p>
-                </CardContent>
-              </Card>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="grid md:grid-cols-2 gap-12 items-center mb-24 md:grid-flow-row-dense">
+              <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700 md:order-1">
+                <img 
+                  src="/screenshot_3.png" 
+                  alt="AI assistant in action" 
+                  className="w-full h-auto"
+                />
+              </div>
+              <div className="space-y-6">
+                <h3 className="text-2xl font-medium text-violet-400">AI-Powered Focus Keeper</h3>
+                <p className="text-zinc-300 text-lg leading-relaxed">
+                  Our AI assistant actively participates in your discussions, keeping conversations 
+                  on track and helping teams stay focused on their objectives.
+                </p>
+              </div>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="grid md:grid-cols-2 gap-12 items-center">
+              <div className="space-y-6">
+                <h3 className="text-2xl font-medium text-violet-400">Smart Summaries & Catch-up</h3>
+                <p className="text-zinc-300 text-lg leading-relaxed">
+                  Never miss out on important discussions. Get instant AI-generated summaries 
+                  for quick catch-ups and comprehensive meeting wrap-ups.
+                </p>
+              </div>
+              <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700">
+                <img 
+                  src="/screenshot_2.png" 
+                  alt="Summary interface" 
+                  className="w-full h-auto"
+                />
+              </div>
             </div>
           </div>
         </section>
 
         {/* Pricing section */}
-        <section id="pricing" className="py-24 space-y-12">
-          <h2 className="text-2xl font-medium text-center bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-            Simple Pricing
-          </h2>
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            <Card className="bg-zinc-800 border-zinc-700 h-full">
-              <CardHeader>
-                <CardTitle className="text-zinc-100">Free</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="space-y-2 text-sm text-zinc-400">
-                  <li>Create up to 3 chats</li>
-                  <li>Basic AI summary for each chat</li>
-                  <li>Standard privacy controls</li>
+        <section id="pricing" className="py-24">
+          <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 className="text-3xl font-medium text-center bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent mb-16">
+              Early Access Pricing
+            </h2>
+            
+            <div className="bg-zinc-800/50 rounded-2xl p-8 border border-violet-500/20 shadow-xl">
+              <div className="flex justify-between items-start mb-6">
+                <div>
+                  <span className="inline-block px-3 py-1 bg-violet-500/20 text-violet-400 text-sm rounded-full mb-3">
+                    Early Adopter Special
+                  </span>
+                  <h3 className="text-2xl font-medium text-zinc-100">Free Access</h3>
+                </div>
+                <p className="text-3xl font-bold text-zinc-100">$0</p>
+              </div>
+
+              <div className="space-y-4 mb-8">
+                <p className="text-zinc-300">
+                  We're offering completely free access to early adopters like you who help shape our product.
+                </p>
+                <ul className="space-y-3">
+                  {[
+                    "Unlimited group chats",
+                    "AI-powered focus keeper",
+                    "Smart meeting summaries",
+                    "Early access to new features",
+                    "Help shape product roadmap"
+                  ].map((feature) => (
+                    <li key={feature} className="flex items-center text-zinc-300">
+                      <svg className="w-5 h-5 text-violet-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                      </svg>
+                      {feature}
+                    </li>
+                  ))}
                 </ul>
-                <Button className="w-full" variant="secondary" asChild>
-                  <Link href="/register">Get Started</Link>
+              </div>
+
+              <div className="space-y-4">
+                <Button className="w-full bg-violet-600 hover:bg-violet-700 text-white" asChild>
+                  <Link href="/register">Get Started Free</Link>
                 </Button>
-              </CardContent>
-            </Card>
-            <Card className="bg-zinc-800 border-zinc-700 relative overflow-hidden h-full">
-              <div className="absolute inset-0 bg-gradient-to-br from-violet-500/10 to-violet-700/10" />
-              <CardHeader>
-                <CardTitle className="text-zinc-100">Pro</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <ul className="space-y-2 text-sm text-zinc-400">
-                  <li>Unlimited chats</li>
-                  <li>Advanced AI analysis & quick polls</li>
-                  <li>Priority customer support</li>
-                </ul>
-                <Button className="w-full bg-violet-600 hover:bg-violet-700" asChild>
-                  <Link href="/register">Upgrade to Pro</Link>
-                </Button>
-              </CardContent>
-            </Card>
+                <p className="text-sm text-zinc-400 text-center">
+                  Have feedback? <a href="mailto:nithinag10@gmail.com" className="text-violet-400 hover:underline">Share your thoughts</a>
+                </p>
+              </div>
+            </div>
           </div>
         </section>
       </main>

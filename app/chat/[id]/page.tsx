@@ -44,11 +44,11 @@ export default function ChatPage() {
   }
 
   useEffect(() => {
-    if (!id) return
+    if (!id) return;
 
     const fetchMessages = async () => {
       try {
-        const result = await getMessages(id)
+        const result = await getMessages(id);
 
         const fetchedMessages: Message[] = Array.isArray(result.messages)
           ? result.messages.map((msg: Message) => ({
@@ -57,31 +57,40 @@ export default function ChatPage() {
               content: msg.content,
               timestamp: msg.timestamp,
             }))
-          : []
+          : [];
+
+        // Add anchor message at the end
+        const anchorMessage: Message = {
+          content: "Yo squad! 🌟 Let's focus up—trip needs our big brain energy 🧠⚓",
+          id: "anchor-" + Date.now(),
+          sender_id: "The Anchor ⚓",
+          sender_name: "The Anchor ⚓",
+          timestamp: new Date().toISOString()
+        };
 
         setMessages((prevMessages) => {
           const existingMessageMap = new Map<string, Message>(
             prevMessages.map((msg) => [msg.id || msg.tempId || '', msg])
-          )
+          );
 
-          const reconciledMessages = fetchedMessages.map((msg) =>
+          const reconciledMessages = [...fetchedMessages, anchorMessage].map((msg) =>
             existingMessageMap.has(msg.id || '')
               ? { ...existingMessageMap.get(msg.id || ''), ...msg }
               : msg
-          )
+          );
 
-          return reconciledMessages
-        })
+          return reconciledMessages;
+        });
       } catch (error) {
-        console.error('Failed to fetch messages:', error)
+        console.error('Failed to fetch messages:', error);
       }
-    }
+    };
 
-    fetchMessages()
-    const interval = setInterval(fetchMessages, 10000)
+    fetchMessages();
+    const interval = setInterval(fetchMessages, 10000);
 
-    return () => clearInterval(interval)
-  }, [id])
+    return () => clearInterval(interval);
+  }, [id]);
 
   const handleSendMessage = async () => {
     if (!id || !newMessage.trim() || !userId) return
