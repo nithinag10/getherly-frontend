@@ -8,6 +8,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import Link from 'next/link';
+import { faker } from '@faker-js/faker';
 
 export function RegisterForm() {
   const [name, setName] = useState("");
@@ -45,12 +46,28 @@ export function RegisterForm() {
     }
   }
 
+  function handleLazy() {
+    // Use Faker to generate unique credentials
+    const generatedName = faker.internet.userName();
+    const generatedEmail = faker.internet.email();
+    const generatedPassword = faker.internet.password();
+
+    setName(generatedName);
+    setEmail(generatedEmail);
+    setPassword(generatedPassword);
+
+    // Alert the user to store the credentials
+    window.alert(
+      `Your generated credentials are:\n\nName: ${generatedName}\nEmail: ${generatedEmail}\nPassword: ${generatedPassword}\n\nPlease save these in your password manager.`
+    );
+  }
+
   return (
     <Card className="w-[350px] bg-zinc-800 border-zinc-700 text-zinc-100">
       <CardHeader>
         <CardTitle>Register</CardTitle>
         <CardDescription className="text-zinc-400">
-          Create a new account to get started.
+          Create an account to get started.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -97,18 +114,31 @@ export function RegisterForm() {
               <AlertDescription>{error}</AlertDescription>
             </Alert>
           )}
-          <Button 
-            className="w-full mt-4 bg-violet-600 hover:bg-violet-700" 
-            type="submit" 
-            disabled={isPending}
-          >
-            {isPending ? "Registering..." : "Register"}
-          </Button>
+          <div className="flex items-center justify-between mt-4">
+            <Button
+              className="bg-violet-600 hover:bg-violet-700"
+              type="submit"
+              disabled={isPending}
+            >
+              {isPending ? "Registering..." : "Register"}
+            </Button>
+            <Button
+              variant="secondary"
+              className="bg-zinc-700 text-zinc-100 hover:bg-zinc-600"
+              onClick={handleLazy}
+              type="button"
+            >
+              I&apos;m Lazy
+            </Button>
+          </div>
         </form>
       </CardContent>
       <CardFooter className="flex flex-col items-center">
         <p className="text-sm text-zinc-400">
-          Already have an account? <Link href="/login" className="text-violet-400 hover:underline">Login</Link>
+          Already have an account?{" "}
+          <Link href="/login" className="text-violet-400 hover:underline">
+            Sign in
+          </Link>
         </p>
       </CardFooter>
     </Card>

@@ -64,7 +64,7 @@ export default function ChatPage() {
             prevMessages.map((msg) => [msg.id || msg.tempId || '', msg])
           );
 
-          const reconciledMessages = [...fetchedMessages, anchorMessage].map((msg) =>
+          const reconciledMessages = [...fetchedMessages].map((msg) =>
             existingMessageMap.has(msg.id || '')
               ? { ...existingMessageMap.get(msg.id || ''), ...msg }
               : msg

@@ -15,10 +15,17 @@ export function LandingPage() {
               <span className="text-lg font-semibold tracking-tight">Gatherly</span>
             </Link>
             <nav className="flex items-center gap-6">
-              <Link href="#pricing" className="text-sm font-medium text-zinc-300 hover:text-zinc-100 transition-colors">
+              <Link
+                href="#pricing"
+                className="text-sm font-medium text-zinc-300 hover:text-zinc-100 transition-colors"
+              >
                 Pricing
               </Link>
-              <Button variant="secondary" className="bg-zinc-800 text-zinc-100 hover:bg-zinc-700" asChild>
+              <Button
+                variant="secondary"
+                className="bg-zinc-800 text-zinc-100 hover:bg-zinc-700"
+                asChild
+              >
                 <Link href="/login">Sign In</Link>
               </Button>
             </nav>
@@ -32,23 +39,22 @@ export function LandingPage() {
         <section className="py-24 space-y-12">
           <div className="max-w-3xl mx-auto text-center space-y-6">
             <h1 className="text-4xl font-medium tracking-tight bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-              Conversations with Purpose. Simplified.
+              Plan That Epic Trip or Party — No BS 🏖️🥳
             </h1>
             <p className="text-zinc-400 text-lg">
-              Host focused group chats and let our AI do the tracking, so you can focus on the conversation.
+              Tired of group chats that drag on and go nowhere? Let our AI keep 
+              everyone on track, so you can focus on living your best life! 
             </p>
             <div className="flex gap-4 justify-center">
               <Button size="lg" className="bg-violet-600 hover:bg-violet-700" asChild>
                 <Link href="/register">Create Your First Chat</Link>
               </Button>
-              <Button 
-                size="lg" 
-                className="bg-zinc-700 hover:bg-zinc-600 border border-violet-500/30 text-violet-100" 
+              <Button
+                size="lg"
+                className="bg-zinc-700 hover:bg-zinc-600 border border-violet-500/30 text-violet-100"
                 asChild
               >
-                <Link href="#how-it-works">
-                  See How It Works
-                </Link>
+                <Link href="#how-it-works">See How It Works</Link>
               </Button>
             </div>
           </div>
@@ -57,31 +63,42 @@ export function LandingPage() {
         {/* Features section */}
         <section id="how-it-works" className="py-24 space-y-12">
           <h2 className="text-2xl font-medium text-center bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent">
-            How It Works
+            How It Works 🔥
           </h2>
           <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto px-4">
+            {/* Feature 1 */}
             <div className="space-y-4 text-center">
               <div className="mx-auto w-12 h-12 flex items-center justify-center bg-violet-600/10 rounded-lg">
                 <MessageSquare className="w-6 h-6 text-violet-400" />
               </div>
-              <h3 className="text-xl font-medium text-zinc-100">Create Your Space</h3>
-              <p className="text-zinc-400">Start a focused discussion space for your team, project, or study group in seconds.</p>
+              <h3 className="text-xl font-medium text-zinc-100">Start Your Squad Chat</h3>
+              <p className="text-zinc-400">
+                Create a chat with a clear agenda for your trip or party crew. 
+                Our AI keeps track of the agenda, ensuring no plans fall through the cracks. 
+                Say goodbye to endless group texts; we&apos;ve got you.
+              </p>
             </div>
-
+            {/* Feature 2 */}
             <div className="space-y-4 text-center">
               <div className="mx-auto w-12 h-12 flex items-center justify-center bg-violet-600/10 rounded-lg">
                 <Share2 className="w-6 h-6 text-violet-400" />
               </div>
-              <h3 className="text-xl font-medium text-zinc-100">Instant Collaboration</h3>
-              <p className="text-zinc-400">Share a quick invite code with your team. No accounts needed—just join and start contributing right away.</p>
+              <h3 className="text-xl font-medium text-zinc-100">No Accounts, Just Vibes</h3>
+              <p className="text-zinc-400">
+                Send a short invite code to your squad. They&apos;re in—no sign-ups, 
+                no forms. Jump straight into the conversation.
+              </p>
             </div>
-
+            {/* Feature 3 */}
             <div className="space-y-4 text-center">
               <div className="mx-auto w-12 h-12 flex items-center justify-center bg-violet-600/10 rounded-lg">
                 <FileText className="w-6 h-6 text-violet-400" />
               </div>
-              <h3 className="text-xl font-medium text-zinc-100">Smart Summaries</h3>
-              <p className="text-zinc-400">Get AI-powered summaries of your discussions. Capture key points and decisions, then close the chat when done.</p>
+              <h3 className="text-xl font-medium text-zinc-100">Sassy Summaries</h3>
+              <p className="text-zinc-400">
+                Our AI whips up quick highlights of the chat — zero fluff. 
+                Perfect for catching up if you snoozed those notifications. 
+              </p>
             </div>
           </div>
         </section>
@@ -90,20 +107,20 @@ export function LandingPage() {
         <section className="py-24 bg-zinc-800/50">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-medium text-center bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent mb-16">
-              Why Choose Gatherly?
+              Why Hearts Gatherly ❤️
             </h2>
 
             {/* Feature 1 */}
             <div className="grid md:grid-cols-2 gap-12 items-center mb-24">
               <div className="space-y-6">
-                <h3 className="text-2xl font-medium text-violet-400">Quick & Private Conversations</h3>
+                <h3 className="text-2xl font-medium text-violet-400">Super-Fast & Super-Private</h3>
                 <p className="text-zinc-300 text-lg leading-relaxed">
-                  Join instantly with a simple code - no sign-ups required. Keep your discussions private 
-                  and maintain anonymity while collaborating with your team.
+                  Jump in with a simple code—no spammy forms, no awkward registrations. 
+                  Keep every plan hush-hush (or wide open—your call). 
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700">
-                <Image 
+                <Image
                   src="/screenshot_1.png"
                   alt="Quick join interface"
                   width={1920}
@@ -117,7 +134,7 @@ export function LandingPage() {
             {/* Feature 2 */}
             <div className="grid md:grid-cols-2 gap-12 items-center mb-24 md:grid-flow-row-dense">
               <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700 md:order-1">
-                <Image 
+                <Image
                   src="/screenshot_3.png"
                   alt="AI assistant in action"
                   width={1920}
@@ -126,10 +143,10 @@ export function LandingPage() {
                 />
               </div>
               <div className="space-y-6">
-                <h3 className="text-2xl font-medium text-violet-400">AI-Powered Focus Keeper</h3>
+                <h3 className="text-2xl font-medium text-violet-400">AI Hype Person</h3>
                 <p className="text-zinc-300 text-lg leading-relaxed">
-                  Our AI assistant actively participates in your discussions, keeping conversations 
-                  on track and helping teams stay focused on their objectives.
+                Our AI keeps chats on track! 🚨 It intervenes when things go off-topic 
+                and warns anyone steering the conversation sideways. Stay focused, stay fun!
                 </p>
               </div>
             </div>
@@ -137,14 +154,15 @@ export function LandingPage() {
             {/* Feature 3 */}
             <div className="grid md:grid-cols-2 gap-12 items-center">
               <div className="space-y-6">
-                <h3 className="text-2xl font-medium text-violet-400">Smart Summaries & Catch-up</h3>
+                <h3 className="text-2xl font-medium text-violet-400">Instant Recaps & Catch-Up</h3>
                 <p className="text-zinc-300 text-lg leading-relaxed">
-                  Never miss out on important discussions. Get instant AI-generated summaries 
-                  for quick catch-ups and comprehensive meeting wrap-ups.
+                  Busy living your best life? No worries. Our AI does the 
+                  heavy lifting with short and sweet recaps, so you can 
+                  jump back in whenever you want.
                 </p>
               </div>
               <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-2xl border border-zinc-700">
-                <Image 
+                <Image
                   src="/screenshot_2.png"
                   alt="Summary interface"
                   width={1920}
@@ -160,7 +178,7 @@ export function LandingPage() {
         <section id="pricing" className="py-24">
           <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 className="text-3xl font-medium text-center bg-gradient-to-br from-zinc-100 to-zinc-400 bg-clip-text text-transparent mb-16">
-              Early Access Pricing
+              Early Access Pricing 💸
             </h2>
             
             <div className="bg-zinc-800/50 rounded-2xl p-8 border border-violet-500/20 shadow-xl">
@@ -176,18 +194,24 @@ export function LandingPage() {
 
               <div className="space-y-4 mb-8">
                 <p className="text-zinc-300">
-                  We&apos;re offering completely free access to early adopters like you who help shape our product.
+                  We&apos;re all about building the next cool thing together, so it&apos;s free 
+                  for the ones who shape our vibe. No strings, no cap.
                 </p>
                 <ul className="space-y-3">
                   {[
                     "Unlimited group chats",
-                    "AI-powered focus keeper",
-                    "Smart meeting summaries",
+                    "AI hype person for planning",
+                    "Sassy chat summaries",
                     "Early access to new features",
-                    "Help shape product roadmap"
+                    "Help steer our product roadmap"
                   ].map((feature) => (
                     <li key={feature} className="flex items-center text-zinc-300">
-                      <svg className="w-5 h-5 text-violet-400 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg
+                        className="w-5 h-5 text-violet-400 mr-3"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
                       </svg>
                       {feature}
@@ -201,7 +225,13 @@ export function LandingPage() {
                   <Link href="/register">Get Started Free</Link>
                 </Button>
                 <p className="text-sm text-zinc-400 text-center">
-                  Have feedback? <a href="mailto:nithinag10@gmail.com" className="text-violet-400 hover:underline">Share your thoughts</a>
+                  Wanna chat?{" "}
+                  <a
+                    href="mailto:nithinag10@gmail.com"
+                    className="text-violet-400 hover:underline"
+                  >
+                    Slide into our inbox
+                  </a>
                 </p>
               </div>
             </div>
@@ -217,10 +247,16 @@ export function LandingPage() {
               © {new Date().getFullYear()} Gatherly. All rights reserved.
             </p>
             <nav className="flex gap-6">
-              <Link href="#" className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors">
+              <Link
+                href="#"
+                className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
+              >
                 Terms
               </Link>
-              <Link href="#" className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors">
+              <Link
+                href="#"
+                className="text-sm text-zinc-400 hover:text-zinc-300 transition-colors"
+              >
                 Privacy
               </Link>
             </nav>
@@ -230,4 +266,3 @@ export function LandingPage() {
     </div>
   )
 }
-
