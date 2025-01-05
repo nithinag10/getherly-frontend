@@ -7,7 +7,7 @@ import { useUserId } from '@/hooks/useUserId'
 import { Button } from '@/components/ui/button'
 import { CreateChatModal } from '@/components/create-chat-modal'
 import { JoinChatModal } from '@/components/join-chat-modal'
-
+import { Menu, X } from 'lucide-react'
 
 interface Chat {
   id: string;
@@ -23,6 +23,7 @@ interface GetUserChatsResponse {
 }
 
 export default function ChatLayout({ children }: { children: React.ReactNode }) {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const router = useRouter();
   const userId = useUserId();
   const [chats, setChats] = useState<Chat[]>([]);
@@ -48,9 +49,27 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
   };
 
   return (
-    <div className="flex h-screen bg-zinc-900">
+    <div className="flex h-screen bg-zinc-900 relative">
+      {/* Mobile menu button */}
+      <button
+        onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+        className="md:hidden fixed top-4 left-4 z-50 p-2 bg-zinc-800 rounded-md"
+      >
+        {isMobileMenuOpen ? (
+          <X className="h-6 w-6 text-zinc-400" />
+        ) : (
+          <Menu className="h-6 w-6 text-zinc-400" />
+        )}
+      </button>
+
       {/* Sidebar */}
-      <div className="w-80 border-r border-zinc-800 flex flex-col">
+      <div className={`
+        fixed md:static inset-y-0 left-0 transform 
+        ${isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full'}
+        md:translate-x-0 transition-transform duration-200 ease-in-out
+        w-[280px] md:w-80 border-r border-zinc-800 flex flex-col
+        bg-zinc-900 md:bg-transparent z-40
+      `}>
         <div className="p-4 border-b border-zinc-800">
           <div className="space-y-2">
             <Button
@@ -73,11 +92,14 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
           {chats.map((chat) => (
             <div
               key={chat.id}
-              onClick={() => handleChatClick(chat.id)}
-              className="p-4 hover:bg-zinc-800 cursor-pointer border-b border-zinc-800"
+              onClick={() => {
+                handleChatClick(chat.id)
+                setIsMobileMenuOpen(false)
+              }}
+              className="p-3 md:p-4 hover:bg-zinc-800 cursor-pointer border-b border-zinc-800"
             >
-              <h3 className="font-semibold text-zinc-100">{chat.chat_name}</h3>
-              <p className="text-sm text-zinc-400 truncate">{chat.agenda}</p>
+              <h3 className="font-semibold text-zinc-100 text-sm md:text-base">{chat.chat_name}</h3>
+              <p className="text-xs md:text-sm text-zinc-400 truncate">{chat.agenda}</p>
               {chat.last_message && (
                 <p className="text-sm text-zinc-500 mt-1 truncate">
                   {chat.last_message}
@@ -92,7 +114,7 @@ export default function ChatLayout({ children }: { children: React.ReactNode }) 
       </div>
 
       {/* Main Content */}
-      <div className="flex-1">
+      <div className="flex-1 md:ml-0">
         {children}
       </div>
 

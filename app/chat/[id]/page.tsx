@@ -147,12 +147,12 @@ export default function ChatPage() {
   return (
     <div className="flex flex-col h-screen bg-zinc-900">
       <header className="bg-zinc-800 p-4 flex justify-between items-center">
-        <h1 className="text-xl font-bold">Chat</h1>
+        <h1 className="text-xl font-bold md:ml-0 ml-12">Chat</h1> {/* Add margin for menu button */}
         {id && (
           <div className="flex gap-2">
             <Button
               onClick={() => setIsInviteModalOpen(true)}
-              className="bg-violet-600 hover:bg-violet-700 transition-colors"
+              className="bg-violet-600 hover:bg-violet-700 transition-colors text-sm md:text-base"
             >
               Invite
             </Button>
@@ -161,13 +161,13 @@ export default function ChatPage() {
                 handleGetSummary()
                 setIsSummaryOpen(true)
               }}
-              className="bg-violet-600 hover:bg-violet-700 transition-colors"
+              className="bg-violet-600 hover:bg-violet-700 transition-colors text-sm md:text-base"
               disabled={isLoadingSummary}
             >
               {isLoadingSummary ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                  Loading...
+                  <span className="hidden md:inline">Loading...</span>
                 </>
               ) : (
                 'Catch Up'
@@ -179,7 +179,7 @@ export default function ChatPage() {
 
       {/* Summary Dialog */}
       <Dialog open={isSummaryOpen && summary !== null} onOpenChange={setIsSummaryOpen}>
-        <DialogContent className="bg-zinc-800 border-zinc-700 text-zinc-100 max-w-2xl">
+        <DialogContent className="bg-zinc-800 border-zinc-700 text-zinc-100 max-w-[90vw] md:max-w-2xl mx-4">
           <DialogHeader>
             <DialogTitle className="text-lg font-semibold flex justify-between items-center">
               Chat Summary
@@ -246,9 +246,11 @@ export default function ChatPage() {
       )}
 
       {id ? (
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 h-0">
+        <div className="flex-1 overflow-y-auto p-2 md:p-4 space-y-2 md:space-y-4 h-0">
           {messages.map((message, index) => (
-            <div key={message.id || message.tempId || index} className="bg-zinc-800 p-3 rounded-lg">
+            <div key={message.id || message.tempId || index} 
+              className="bg-zinc-800 p-2 md:p-3 rounded-lg text-sm md:text-base"
+            >
               <p>
                 <strong className="text-violet-400">{message.sender_id}: </strong>
                 {message.content}
@@ -264,15 +266,18 @@ export default function ChatPage() {
       )}
 
       {id && (
-        <div className="p-4 bg-zinc-800">
+        <div className="p-2 md:p-4 bg-zinc-800">
           <div className="flex space-x-2">
             <Input
               value={newMessage}
               onChange={(e) => setNewMessage(e.target.value)}
               placeholder="Type your message..."
-              className="flex-1 bg-zinc-700 border-zinc-600 text-zinc-100 placeholder-zinc-400"
+              className="flex-1 bg-zinc-700 border-zinc-600 text-zinc-100 placeholder-zinc-400 text-sm md:text-base"
             />
-            <Button onClick={handleSendMessage} className="bg-violet-600 hover:bg-violet-700">
+            <Button 
+              onClick={handleSendMessage} 
+              className="bg-violet-600 hover:bg-violet-700 px-3 md:px-4"
+            >
               Send
             </Button>
           </div>
