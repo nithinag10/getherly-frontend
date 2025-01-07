@@ -1,11 +1,33 @@
 import Image from 'next/image'
+import Script from 'next/script'  // Add this import
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
-import { MessageSquare, Share2, FileText } from 'lucide-react'
+import { MessageSquare, Share2, FileText, Smartphone } from 'lucide-react'
 
 export function LandingPage() {
   return (
     <div className="min-h-screen bg-zinc-900 text-zinc-100">
+
+      {/* Google Analytics Script */}
+      <Script
+        strategy="afterInteractive"
+        src="https://www.googletagmanager.com/gtag/js?id=G-4QK9DQWRWW"
+      />
+      <Script
+        id="google-analytics"
+        strategy="afterInteractive"
+        dangerouslySetInnerHTML={{
+          __html: `
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-4QK9DQWRWW', {
+            page_path: window.location.pathname,
+          });
+        `,
+        }}
+      />
+
       {/* Header with proper centering */}
       <header className="border-b border-zinc-800 bg-zinc-900/50 backdrop-blur-sm sticky top-0 z-50">
         <div className="container max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -101,6 +123,24 @@ export function LandingPage() {
               </p>
             </div>
           </div>
+
+          {/* NEW Feature 4 - WhatsApp Bot Beta */}
+          <div className="grid md:grid-cols-3 gap-8 lg:gap-12 max-w-6xl mx-auto px-4 mt-12">
+            <div className="space-y-4 text-center md:col-span-3 lg:col-span-3">
+              <div className="mx-auto w-12 h-12 flex items-center justify-center bg-violet-600/10 rounded-lg">
+                <Smartphone className="w-6 h-6 text-violet-400" />
+              </div>
+              <h3 className="text-xl font-medium text-zinc-100">WhatsApp Bot (Beta)</h3>
+              <p className="text-zinc-400 max-w-2xl mx-auto">
+                Our latest addition for the ones who <span className="font-bold">really</span> can’t leave WhatsApp. 
+                Join group chats through our in-development WhatsApp bot—no sign-in, no fuss. 
+                It’s the easiest way to rally your squad, especially if they’re all about that 
+                “People does everything on mobile” life. 
+                <br />
+                <span className="text-violet-200 font-semibold">Jump in now and flex on your friends before it’s cool!</span>
+              </p>
+            </div>
+          </div>
         </section>
 
         {/* Features Showcase Section */}
@@ -145,8 +185,8 @@ export function LandingPage() {
               <div className="space-y-6">
                 <h3 className="text-2xl font-medium text-violet-400">AI Hype Person</h3>
                 <p className="text-zinc-300 text-lg leading-relaxed">
-                Our AI keeps chats on track! 🚨 It intervenes when things go off-topic 
-                and warns anyone steering the conversation sideways. Stay focused, stay fun!
+                  Our AI keeps chats on track! 🚨 It intervenes when things go off-topic 
+                  and warns anyone steering the conversation sideways. Stay focused, stay fun!
                 </p>
               </div>
             </div>
@@ -202,6 +242,7 @@ export function LandingPage() {
                     "Unlimited group chats",
                     "AI hype person for planning",
                     "Sassy chat summaries",
+                    "WhatsApp Bot (Beta) included",
                     "Early access to new features",
                     "Help steer our product roadmap"
                   ].map((feature) => (
