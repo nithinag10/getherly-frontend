@@ -11,7 +11,7 @@ export function LandingPage() {
       {/* Google Analytics Script */}
       <Script
         strategy="afterInteractive"
-        src={`https://www.googletagmanager.com/gtag/js?id=G-4QK9DQWRWW`}
+        src={`https://www.googletagmanager.com/gtag/js?id=G-0W0T09S1WT`}
       />
       <Script
         id="google-analytics"
@@ -21,7 +21,7 @@ export function LandingPage() {
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-4QK9DQWRWW', {
+            gtag('config', 'G-0W0T09S1WT', {
               page_path: window.location.pathname,
             });
           `,
